@@ -1,0 +1,19 @@
+# deps / build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# vite
+.vite/
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
