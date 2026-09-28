@@ -8,9 +8,6 @@ dist-ssr/
 server/data/sites.json
 server/data/visits.json
 
-# unrelated local scaffold — never commit
-src/ai-brain/
-
 # vite
 .vite/
 

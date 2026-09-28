@@ -12,7 +12,7 @@ const line = {
 export function Hero({ count, totalLikes }: { count: number; totalLikes: number }) {
   return (
     <header className="relative overflow-hidden border-b border-line">
-      <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 md:pt-20">
+      <div className="mx-auto max-w-7xl px-5 pb-10 pt-28 md:pt-32">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}

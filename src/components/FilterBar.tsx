@@ -23,7 +23,7 @@ export function FilterBar({
 }) {
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch })
   return (
-    <div className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur">
+    <div className="sticky top-16 z-40 border-b border-line bg-paper/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-5 py-3">
         <input
           value={filters.query}

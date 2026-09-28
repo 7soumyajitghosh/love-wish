@@ -84,7 +84,7 @@ export default function App() {
         )}
       </main>
 
-      <section className="border-t border-line bg-coal text-paper">
+      <section id="submit" className="scroll-mt-16 border-t border-line bg-coal text-paper">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-5 py-14">
           <div>
             <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
