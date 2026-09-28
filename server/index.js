@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-//  Love Universe backend
+//  KINETIC gallery backend
 //  Express API + static host for the built frontend.
 //  Run: npm run server   (serves http://localhost:3001)
 // ─────────────────────────────────────────────
@@ -12,36 +12,36 @@ import { createStore } from './store.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3001);
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'love-admin';
 const DATA_DIR = path.join(__dirname, 'data');
 const DIST_DIR = path.join(__dirname, '..', 'dist');
 
-const notesStore = createStore(path.join(DATA_DIR, 'notes.json'), []);
-const visitsStore = createStore(path.join(DATA_DIR, 'visits.json'), { count: 0 });
-const CONFIG_PATH = path.join(DATA_DIR, 'love.json');
+const SEED_PATH = path.join(DATA_DIR, 'seed.json');
+const SITES_PATH = path.join(DATA_DIR, 'sites.json');
 
-function readConfig() {
-  try {
-    return JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-  } catch {
-    return null;
-  }
+// Runtime DB starts as a copy of the tracked seed; likes/submissions persist here.
+if (!fs.existsSync(SITES_PATH) && fs.existsSync(SEED_PATH)) {
+  fs.copyFileSync(SEED_PATH, SITES_PATH);
 }
+const sitesStore = createStore(SITES_PATH, []);
+const visitsStore = createStore(path.join(DATA_DIR, 'visits.json'), { count: 0 });
+
+const VARIANTS = ['waves', 'orbs', 'grid', 'bars', 'dots', 'rings'];
+const CATEGORIES = ['Portfolio', 'Studio', '3D', 'AI', 'E-commerce', 'Music', 'Typography', 'SaaS'];
 
 const app = express();
 app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json({ limit: '32kb' }));
 
-// ── simple in-memory rate limit for posting notes (8 per IP / 10 min) ──
+// ── rate limits (per IP) ──
 const buckets = new Map();
-function rateLimited(ip) {
+function rateLimited(ip, key, max, windowMs) {
   const now = Date.now();
-  const windowMs = 10 * 60 * 1000;
-  const hits = (buckets.get(ip) || []).filter((t) => now - t < windowMs);
-  if (hits.length >= 8) return true;
+  const k = `${ip}:${key}`;
+  const hits = (buckets.get(k) || []).filter((t) => now - t < windowMs);
+  if (hits.length >= max) return true;
   hits.push(now);
-  buckets.set(ip, hits);
+  buckets.set(k, hits);
   return false;
 }
 
@@ -49,55 +49,66 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
-// Whole love story content, editable without touching code.
-app.get('/api/config', (_req, res) => {
-  const cfg = readConfig();
-  if (!cfg) return res.status(500).json({ error: 'love.json missing' });
-  res.json(cfg);
+// ── Gallery ──
+app.get('/api/sites', (_req, res) => {
+  res.json({ sites: sitesStore.read() });
 });
 
-// Update story content (owner only). Header: x-admin-token: <ADMIN_TOKEN>
-app.put('/api/config', (req, res) => {
-  if (req.headers['x-admin-token'] !== ADMIN_TOKEN) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
-  const body = req.body;
-  if (!body || typeof body !== 'object' || !body.loverName || !body.partnerName) {
-    return res.status(400).json({ error: 'config must include loverName and partnerName' });
-  }
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(body, null, 2));
-  res.json({ ok: true });
-});
-
-// ── Marks on the universe (guestbook) ──
-app.get('/api/notes', (_req, res) => {
-  const all = notesStore.read();
-  res.json({ notes: all.slice(-100).reverse() });
-});
-
-app.post('/api/notes', (req, res) => {
+app.post('/api/sites', (req, res) => {
   const ip = req.ip || 'unknown';
-  if (rateLimited(ip)) {
-    return res.status(429).json({ error: 'too many notes — try again later' });
+  if (rateLimited(ip, 'submit', 5, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'too many submissions — try again later' });
   }
-  const name = String(req.body?.name ?? '').trim().slice(0, 40);
-  const message = String(req.body?.message ?? '').trim().slice(0, 500);
-  if (!name || !message) {
-    return res.status(400).json({ error: 'name and message are required' });
+  const title = String(req.body?.title ?? '').trim().slice(0, 60);
+  const url = String(req.body?.url ?? '').trim().slice(0, 200);
+  const description = String(req.body?.description ?? '').trim().slice(0, 300);
+  const category = String(req.body?.category ?? '');
+  const style = String(req.body?.style ?? '');
+  const tech = Array.isArray(req.body?.tech) ? req.body.tech.map(String).slice(0, 3) : [];
+  if (!title || !description) {
+    return res.status(400).json({ error: 'title and description are required' });
   }
-  const all = notesStore.read();
-  const note = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    name,
-    message,
-    at: new Date().toISOString(),
+  if (!CATEGORIES.includes(category)) {
+    return res.status(400).json({ error: 'unknown category' });
+  }
+  if (style !== 'Dark' && style !== 'Light') {
+    return res.status(400).json({ error: 'style must be Dark or Light' });
+  }
+  const all = sitesStore.read();
+  const n = all.length;
+  const site = {
+    id: `community-${Date.now().toString(36)}`,
+    title,
+    description,
+    url,
+    category,
+    style,
+    tech: tech.length > 0 ? tech : ['CSS'],
+    year: new Date().getFullYear(),
+    hue: (n * 47) % 360,
+    variant: VARIANTS[n % VARIANTS.length],
+    likes: 0,
+    badge: 'Community',
   };
-  all.push(note);
-  notesStore.write(all.slice(-500));
-  res.status(201).json({ note });
+  all.unshift(site);
+  sitesStore.write(all.slice(0, 500));
+  res.status(201).json({ site });
 });
 
-// ── Visit counter ("this story has been opened N times") ──
+app.post('/api/sites/:id/like', (req, res) => {
+  const ip = req.ip || 'unknown';
+  if (rateLimited(ip, 'like', 60, 60 * 1000)) {
+    return res.status(429).json({ error: 'slow down a little' });
+  }
+  const all = sitesStore.read();
+  const site = all.find((s) => s.id === req.params.id);
+  if (!site) return res.status(404).json({ error: 'unknown site' });
+  site.likes = (Number(site.likes) || 0) + 1;
+  sitesStore.write(all);
+  res.json({ likes: site.likes });
+});
+
+// ── Visit counter ──
 app.get('/api/visits', (_req, res) => {
   const data = visitsStore.read();
   data.count = (Number(data.count) || 0) + 1;
@@ -116,11 +127,11 @@ if (fs.existsSync(DIST_DIR)) {
   app.get('/', (_req, res) => {
     res.status(200).json({
       ok: true,
-      message: 'Backend is running. Build the frontend with `npm run build` to serve the site here.',
+      message: 'Backend is running. Build the frontend with `npm run build` to serve the gallery here.',
     });
   });
 }
 
 app.listen(PORT, () => {
-  console.log(`love-universe backend listening on :${PORT}`);
+  console.log(`kinetic gallery backend listening on :${PORT}`);
 });

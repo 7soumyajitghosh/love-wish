@@ -4,17 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        abyss: '#0a0a24',
-        burgundy: '#3b1f5e',
-        crimson: '#ef5d92',
-        rosepink: '#ffc9a3',
-        warmwhite: '#fff8ee',
-        gold: '#e8b26a',
+        paper: '#FAF6EF',
+        ink: '#171310',
+        accent: '#FF4D00',
+        muted: '#8A8378',
+        card: '#FFFFFF',
+        line: '#E8E0D2',
+        coal: '#171310',
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-        script: ['Pinyon Script', 'cursive'],
-        sans: ['Outfit', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
     },
   },

@@ -4,9 +4,12 @@ dist/
 dist-ssr/
 *.local
 
-# runtime backend data (personal notes & counters — never commit)
-server/data/notes.json
+# runtime backend data (community likes/submissions & counters — never commit)
+server/data/sites.json
 server/data/visits.json
+
+# unrelated local scaffold — never commit
+src/ai-brain/
 
 # vite
 .vite/

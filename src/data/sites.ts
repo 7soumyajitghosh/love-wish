@@ -1,0 +1,178 @@
+// Showcase entries. The backend (server/data/seed.json) mirrors this list;
+// user submissions and likes live in the backend at runtime.
+
+export type ThumbVariant = 'waves' | 'orbs' | 'grid' | 'bars' | 'dots' | 'rings'
+
+export type Site = {
+  id: string
+  title: string
+  description: string
+  category: string
+  style: 'Dark' | 'Light'
+  tech: string[]
+  year: number
+  hue: number
+  variant: ThumbVariant
+  likes: number
+  badge?: string
+}
+
+export const CATEGORIES = [
+  'Portfolio',
+  'Studio',
+  '3D',
+  'AI',
+  'E-commerce',
+  'Music',
+  'Typography',
+  'SaaS',
+] as const
+
+export const TECHS = ['GSAP', 'WebGL', 'Three.js', 'Canvas', 'CSS', 'Framer Motion'] as const
+
+export const SEED_SITES: Site[] = [
+  {
+    id: 'orbit-studio',
+    title: 'Orbit Studio',
+    description: 'A branding studio whose homepage is a working solar system — drag the planets to filter the case list by orbit.',
+    category: 'Studio',
+    style: 'Dark',
+    tech: ['WebGL', 'GSAP'],
+    year: 2026,
+    hue: 24,
+    variant: 'orbs',
+    likes: 214,
+  },
+  {
+    id: 'paper-trails',
+    title: 'Paper Trails',
+    description: 'An editorial magazine that folds like paper. Articles crease, flip and stack as you scroll the issue.',
+    category: 'Typography',
+    style: 'Light',
+    tech: ['CSS', 'GSAP'],
+    year: 2026,
+    hue: 42,
+    variant: 'bars',
+    likes: 186,
+  },
+  {
+    id: 'bassline',
+    title: 'Bassline',
+    description: 'An EP launch site where every track gets its own visualizer world. Headphones strongly recommended.',
+    category: 'Music',
+    style: 'Dark',
+    tech: ['WebGL', 'Canvas'],
+    year: 2025,
+    hue: 280,
+    variant: 'waves',
+    likes: 173,
+  },
+  {
+    id: 'kiln-co',
+    title: 'Kiln & Co.',
+    description: 'A ceramics shop where you spin the product photography with your cursor before adding anything to cart.',
+    category: 'E-commerce',
+    style: 'Light',
+    tech: ['Three.js', 'GSAP'],
+    year: 2026,
+    hue: 16,
+    variant: 'rings',
+    likes: 158,
+  },
+  {
+    id: 'field-notes',
+    title: 'Field Notes',
+    description: 'A photographer portfolio laid out as a topographic map — altitude lines bend around each series.',
+    category: 'Portfolio',
+    style: 'Light',
+    tech: ['Canvas', 'GSAP'],
+    year: 2025,
+    hue: 150,
+    variant: 'grid',
+    likes: 141,
+  },
+  {
+    id: 'dream-terminal',
+    title: 'Dream Terminal',
+    description: 'An AI playground styled as a 1983 mainframe. Every prompt boots a tiny dream sequence in the CRT.',
+    category: 'AI',
+    style: 'Dark',
+    tech: ['Canvas', 'CSS'],
+    year: 2026,
+    hue: 130,
+    variant: 'dots',
+    likes: 129,
+  },
+  {
+    id: 'mono-no-aware',
+    title: 'Mono no Aware',
+    description: 'A type foundry specimen that ages in real time — letterforms weather, fade and regrow as you read.',
+    category: 'Typography',
+    style: 'Light',
+    tech: ['GSAP', 'CSS'],
+    year: 2025,
+    hue: 350,
+    variant: 'waves',
+    likes: 117,
+  },
+  {
+    id: 'harbor-lights',
+    title: 'Harbor Lights',
+    description: 'A SaaS onboarding that plays like a night ferry crossing — each feature is a lighthouse you pass.',
+    category: 'SaaS',
+    style: 'Dark',
+    tech: ['Framer Motion', 'Canvas'],
+    year: 2026,
+    hue: 210,
+    variant: 'orbs',
+    likes: 104,
+  },
+  {
+    id: 'soft-machines',
+    title: 'Soft Machines',
+    description: 'A robotics lab tour in plush 3D — every machine squishes when poked. Try not to poke them all.',
+    category: '3D',
+    style: 'Light',
+    tech: ['Three.js', 'GSAP'],
+    year: 2026,
+    hue: 190,
+    variant: 'rings',
+    likes: 96,
+  },
+  {
+    id: 'golden-hour',
+    title: 'Golden Hour',
+    description: 'A film festival site where the whole page color-grades itself from noon to dusk as you scroll.',
+    category: 'Studio',
+    style: 'Dark',
+    tech: ['GSAP', 'WebGL'],
+    year: 2025,
+    hue: 36,
+    variant: 'bars',
+    likes: 88,
+  },
+  {
+    id: 'checkout-dreams',
+    title: 'Checkout Dreams',
+    description: 'A checkout flow redesigned as a conveyor-belt diorama. Abandoned carts get a tiny memorial.',
+    category: 'E-commerce',
+    style: 'Light',
+    tech: ['CSS', 'Framer Motion'],
+    year: 2026,
+    hue: 90,
+    variant: 'grid',
+    likes: 74,
+  },
+  {
+    id: 'signal-bloom',
+    title: 'Signal Bloom',
+    description: 'A generative artist portfolio where your cursor is the seed and every click plants a signal flower.',
+    category: 'Portfolio',
+    style: 'Dark',
+    tech: ['Canvas', 'WebGL'],
+    year: 2026,
+    hue: 320,
+    variant: 'dots',
+    likes: 69,
+  },
+]

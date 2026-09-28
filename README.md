@@ -1,76 +1,63 @@
-# ☀ DAYBREAK — the morning we made
+# KINETIC — a showcase of websites in motion
 
-A premium, fully animated, cinematic interactive story about the longest night — and the morning you bring back. **Not a scrolling website**, but one continuous dawn you help rise.
+An original gallery concept inspired by the great animation-website roundups:
+a curated collection of fictional sites with **live generative preview thumbnails**
+— every card moves, no video files shipped.
 
-`START → Falling Spark → Spark lands → Gather Light → First Glow → Pale Gold → Rose Band → Sun Edge → Full Disc → Daybreak → Light Travels → First Places → Why Morning? → The Night's Letter → Last Stars → Hold the Warmth → Final Journey → GOOD MORNING. → Sun Storm → Finale`
+## ✨ What it does
 
-## ✨ Key rules (as requested)
-
-- **Awakening is interaction-driven, never scroll-driven.** Drag the moon lantern through drifting sparks; each full meter of starlight awakens one constellation layer. Scrolling/wheel only moves between already-completed scenes.
-- **Real procedural animation, no video, no pop-in SVG.** The Heart Constellation ignites progressively on canvas with organic easing, twinkle, web lines, a beating core and rising embers.
-- **Gathering visibly matters:** nearby sparks stream into the lantern, the starlight meter fills, stages lock during each awakening.
-- **Cinematic transitions:** fades, heart-zooms, flying-heart scene bridges, letterbox bars, film grain, vignette.
-- **Mobile-first touch:** drag can, tap memories, hold-to-water button, press-and-hold heartbeat.
-- **Audio starts only after user gesture.** Synthesized WebAudio (no files needed): chimes, water, heartbeat, envelope, generative melody. `🎵 Play Our Song` / mute controls included.
-- **Personalize without touching logic:** edit only `src/loveConfig.ts` (names, dates, memories, reasons, letter, finale, colors).
-- **Reduced motion respected**, responsive, canvas DPR-capped for smoothness.
+- **Gallery grid** of 12 concept entries with canvas-painted animated thumbnails
+  (waves, orbs, grids, bars, particles, rings — each card its own hue + motion)
+- **Hover previews** — thumbnails zoom, arrow buttons slide in, titles tint
+- **Filter bar** — full-text search + category + style (Dark/Light) + craft
+  (GSAP, WebGL, Three.js, Canvas, CSS, Framer Motion)
+- **Detail modal** per entry with tags and like button
+- **Submit flow** — publish your own entry to the gallery (backend-validated)
+- **Likes** with optimistic UI, persisted in the backend
+- **Award-site chrome** — preloader counter, custom dot + trailing-ring cursor,
+  marquee tickers, line-mask headline reveals, sticky blurred navbar, stats hero
 
 ## 🚀 Run
 
 ```bash
 npm install
-npm run dev
+npm run build    # frontend → dist/
+npm run server   # serves API + gallery on http://localhost:3001
 ```
 
-Then open the printed local URL (default `http://localhost:5173`).
-
-Build with `npm run build` and preview with `npm run preview`.
+Frontend-only dev: `npm run dev` (gallery falls back to bundled seed data).
 
 ## 💌 Backend (Express API + static host)
-
-`server/` holds a small Express backend (ESM, zero native deps, JSON-file storage):
 
 | Endpoint | Description |
 |---|---|
 | `GET /api/health` | liveness check |
-| `GET /api/config` | whole story content as JSON (mirrors `loveConfig.ts`) |
-| `PUT /api/config` | update story content — owner only (`x-admin-token` header = `ADMIN_TOKEN`) |
-| `GET /api/notes` | footprints left in the morning, newest first |
-| `POST /api/notes` | leave a footprint `{name, message}` (validated + rate-limited) |
-| `GET /api/visits` | increments + returns the visit counter |
+| `GET /api/sites` | gallery entries (seed + community, with live like counts) |
+| `POST /api/sites` | submit an entry (validated + rate-limited) |
+| `POST /api/sites/:id/like` | like an entry (rate-limited) |
+| `GET /api/visits` | visit counter for the footer |
 
-Run it together with the site:
-
-```bash
-npm install
-npm run build    # frontend → dist/
-npm run server   # serves API + site on http://localhost:3001
-```
-
-Set `ADMIN_TOKEN` env var to protect story edits. The finale scene includes a
-“Leave a footprint in the morning 🌅” wall and a woken-morning counter, both powered by this API —
-and both degrade gracefully when the site is served statically without it.
-
-## 🌍 Deploy (permanent live URL)
-
-One-command options (builds `dist/`, then starts `server/index.js`):
-
-- **Render:** import the repo — `render.yaml` is included (Docker, free plan, `/api/health` check).
-- **Railway / Fly.io / any Docker host:** `Dockerfile` is included (`EXPOSE 3001`).
-- **VPS:** `npm install && npm run build`, then run `npm start` behind nginx/Caddy with `PORT` + `ADMIN_TOKEN` set.
+Storage is JSON files under `server/data/` — `seed.json` is tracked,
+`sites.json`/`visits.json` are runtime data and gitignored.
 
 ## 🗂 Structure
 
 ```
 src/
-  loveConfig.ts            ← personalize the whole story here
-  App.tsx                  ← cinematic scene machine (14 scenes)
+  data/sites.ts              ← seed entries, categories, types
+  utils/api.ts               ← backend client (fails soft offline)
   components/
-    Starfield.tsx          ← living ambient universe canvas
-    HeartConstellationCanvas.tsx ← procedural Heart Constellation + starlight gathering
-  hooks/hooks.ts           ← reduced-motion, cursor glow
-  utils/helpers.ts         ← seeded RNG, heart drawing, synth sound engine
-  index.css / main.tsx
+    ThumbCanvas.tsx          ← generative animated thumbnails
+    Chrome.tsx               ← cursor, preloader, marquee, nav, hero, footer
+    SiteCard.tsx             ← gallery card
+    Modals.tsx               ← detail + submit modals
+  App.tsx                    ← filters, grid, likes, modals
+server/
+  index.js / store.js        ← Express API + static host
+  data/seed.json             ← tracked seed entries
 ```
 
-Edit `src/loveConfig.ts` to make it yours. No animation code lives there.
+## 🌍 Deploy
+
+- **Render:** `render.yaml` included (Docker, `/api/health` check).
+- **Railway / Fly.io / any Docker host:** `Dockerfile` included (`EXPOSE 3001`).
