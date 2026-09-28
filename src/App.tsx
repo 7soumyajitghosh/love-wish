@@ -310,7 +310,7 @@ export default function App() {
       {/* audio controls */}
       <div className="fixed right-4 top-4 z-[60] flex gap-2">
         <button onClick={toggleAudio} className="glass rounded-full px-4 py-2 text-xs tracking-widest uppercase">
-          {audioOn ? '🔇 Mute' : '🎵 Play Our Song'}
+          {audioOn ? '🔇 Mute' : '🎵 Play Music'}
         </button>
         {audioOn && (
           <button onClick={() => setSongOn((s) => !s)} className="glass rounded-full px-4 py-2 text-xs tracking-widest uppercase">
@@ -350,11 +350,11 @@ export default function App() {
               )}
               {openStep >= 3 && (
                 <motion.div key="l3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2 }} className="flex flex-col items-center gap-8">
-                  <p className="font-script text-5xl text-warmwhite text-glow-warm md:text-7xl">{C.opening.line3} ❤️</p>
+                  <p className="font-script text-5xl text-warmwhite text-glow-warm md:text-7xl">{C.opening.line3} ✦</p>
                   <p className="text-xs uppercase tracking-[0.4em] text-white/50">{C.loverName} × {C.partnerName}</p>
                   {openStep >= 4 && (
                     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
-                      <GlassButton onClick={() => { setAudioOn(true); sound.setEnabled(true); go('seed') }}>✨ Begin Our Story ✨</GlassButton>
+                      <GlassButton onClick={() => { setAudioOn(true); sound.setEnabled(true); go('seed') }}>✨ Begin Creation ✨</GlassButton>
                     </motion.div>
                   )}
                 </motion.div>
@@ -385,13 +385,13 @@ export default function App() {
                 style={{ filter: 'drop-shadow(0 0 18px #ff8fa3)' }}
                 animate={reduced ? { x: '42vw', y: '22vh', rotate: 10 } : { x: ['0vw', '25vw', '45vw', '42vw'], y: ['0vh', '6vh', '-4vh', '22vh'], rotate: [0, 14, -10, 8] }}
                 transition={{ duration: reduced ? 1 : 5, ease: 'easeInOut' }}>
-                💗
+                ✨
                 <motion.div className="absolute -left-10 top-1/2 h-px w-10 bg-gradient-to-l from-rosepink to-transparent" />
               </motion.div>
             ) : (
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute left-1/2 top-[60%] -translate-x-1/2 text-4xl"
-                style={{ filter: 'drop-shadow(0 0 22px #ff5d8f)' }}>
-                💗
+                style={{ filter: 'drop-shadow(0 0 22px #ffe9a9)' }}>
+                ✨
                 <motion.div className="absolute -inset-6 rounded-full border border-rosepink/40"
                   animate={{ scale: [1, 1.4], opacity: [0.7, 0] }} transition={{ duration: 1.6, repeat: Infinity }} />
               </motion.div>
@@ -477,7 +477,7 @@ export default function App() {
                 className="font-serif-cine mt-3 text-xl italic text-rosepink md:text-2xl">{C.bloom.line2} {C.bloom.line3}</motion.p>
               {bloom > 0.85 && (
                 <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
-                  <GlassButton onClick={() => go('wind')}>Let the wind carry it 🍃</GlassButton>
+                  <GlassButton onClick={() => go('wind')}>Release it to the dark 🌌</GlassButton>
                 </motion.div>
               )}
             </div>
@@ -490,11 +490,11 @@ export default function App() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.p className="font-serif-cine max-w-2xl text-2xl italic md:text-4xl"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
-              The star-hearts begin to drift —<br />
-              <span className="text-rosepink">but love never disappears. It travels.</span>
+              The sparks refuse to stay —<br />
+              <span className="text-rosepink">but nothing ever truly leaves. It travels.</span>
             </motion.p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="mt-8">
-              <GlassButton onClick={() => go('memories')}>Follow the hearts 💕</GlassButton>
+              <GlassButton onClick={() => go('memories')}>Follow the sparks 💫</GlassButton>
             </motion.div>
           </motion.div>
         )}
@@ -503,8 +503,8 @@ export default function App() {
         {scene === 'memories' && (
           <motion.div key="memories" className="absolute inset-0 z-10 overflow-hidden px-4 pb-24 pt-20"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <p className="text-center font-serif-cine text-2xl italic md:text-3xl">A world made of <span className="text-rosepink">us</span></p>
-            <p className="mt-1 text-center text-xs uppercase tracking-[0.3em] text-white/50">touch a memory to hold it closer</p>
+            <p className="text-center font-serif-cine text-2xl italic md:text-3xl">Worlds, <span className="text-rosepink">so far</span></p>
+            <p className="mt-1 text-center text-xs uppercase tracking-[0.3em] text-white/50">touch a world to visit it</p>
             <div className="relative mx-auto mt-6 h-[52vh] max-w-4xl">
               {C.memories.map((m, i) => (
                 <motion.button
@@ -525,13 +525,13 @@ export default function App() {
                 {C.memoryHearts.map((t, i) => (
                   <motion.span key={i} className="glass rounded-full px-3 py-1 text-xs text-rosepink"
                     animate={reduced ? {} : { y: [0, -8, 0] }} transition={{ duration: 3 + i * 0.5, repeat: Infinity }}>
-                    ❤️ {t}
+                    ✦ {t}
                   </motion.span>
                 ))}
               </div>
             </div>
             <div className="mt-4 text-center">
-              <GlassButton onClick={() => go('whyyou')}>Why you? →</GlassButton>
+              <GlassButton onClick={() => go('whyyou')}>But why? →</GlassButton>
             </div>
             <AnimatePresence>
               {activeMemory && (
@@ -572,7 +572,7 @@ export default function App() {
                     animate={found ? { scale: 1 } : { scale: [1, 1.25, 1], opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 2 + (i % 4) * 0.4, repeat: found ? 0 : Infinity }}
                     whileHover={{ scale: 1.1 }}>
-                    {found ? `💗 ${r}` : '✨'}
+                    {found ? `✦ ${r}` : '✨'}
                   </motion.button>
                 )
               })}
@@ -580,9 +580,9 @@ export default function App() {
             {foundReasons.length >= 4 && (
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="mt-2 flex flex-col items-center gap-4">
                 <motion.div className="text-7xl" animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.6, repeat: Infinity }}
-                  style={{ filter: 'drop-shadow(0 0 30px #ff2e63)' }}>❤️</motion.div>
+                  style={{ filter: 'drop-shadow(0 0 30px #e8b26a)' }}>✦</motion.div>
                 <p className="font-serif-cine italic text-white/70">{C.whyYou.gathered}</p>
-                <GlassButton onClick={() => go('letter')}>I wrote you something ✉️</GlassButton>
+                <GlassButton onClick={() => go('letter')}>Something was left behind →</GlassButton>
               </motion.div>
             )}
           </motion.div>
@@ -598,8 +598,8 @@ export default function App() {
                 <p className="font-serif-cine text-xl italic text-rosepink md:text-2xl">{C.letter.pre2}</p>
                 <motion.button onClick={() => { setEnvelopeOpen(true); sound.envelope() }}
                   whileHover={{ scale: 1.06, rotate: -2 }} whileTap={{ scale: 0.95 }}
-                  className="glass glow-btn rounded-2xl px-12 py-10 text-6xl" aria-label="Open envelope">
-                  ✉️
+                  className="glass glow-btn rounded-2xl px-12 py-10 text-6xl" aria-label="Open the message">
+                  💠
                   <span className="mt-2 block text-xs uppercase tracking-[0.3em] text-white/60">touch to open</span>
                 </motion.button>
               </div>
@@ -614,7 +614,7 @@ export default function App() {
                   )}
                   {letterLines < C.letter.lines.length && <span className="animate-pulse text-rosepink">▍</span>}
                 </div>
-                <p className="font-script mt-4 text-right text-3xl text-rosepink">{C.letter.signature}, {C.loverName}</p>
+                <p className="font-script mt-4 text-right text-3xl text-rosepink">{C.letter.signature}</p>
                 {letterLines >= C.letter.lines.length && (
                   <div className="mt-6 text-center">
                     <GlassButton onClick={() => go('night')}>Look up at the sky 🌙</GlassButton>
@@ -633,27 +633,27 @@ export default function App() {
               style={{ filter: 'drop-shadow(0 0 40px #fff5c9)' }}
               animate={reduced ? {} : { y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity }}>🌙</motion.div>
             <motion.div initial={{ y: 120, opacity: 0 }} animate={{ y: -40, opacity: 1 }} transition={{ duration: reduced ? 1 : 6, ease: 'easeOut' }}
-              className="text-6xl" style={{ filter: 'drop-shadow(0 0 26px #ff5d8f)' }}>❤️</motion.div>
+              className="text-6xl" style={{ filter: 'drop-shadow(0 0 26px #ffe9a9)' }}>✨</motion.div>
             <p className="font-serif-cine mt-6 max-w-2xl text-2xl italic md:text-4xl">{C.nightSky.line1}</p>
             <p className="font-serif-cine mt-2 max-w-2xl text-2xl italic text-rosepink md:text-4xl">{C.nightSky.line2}</p>
             <div className="mt-8"><GlassButton onClick={() => go('heartbeat')}>Come closer…</GlassButton></div>
           </motion.div>
         )}
 
-        {/* ── 10. HEARTBEAT ── */}
+        {/* ── 10. PULSE ── */}
         {scene === 'heartbeat' && (
           <motion.div key="heartbeat" className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ background: `radial-gradient(circle, rgba(201,24,74,${0.12 + holdPower * 0.3}) 0%, transparent 65%)` }}>
+            style={{ background: `radial-gradient(circle, rgba(232,178,106,${0.1 + holdPower * 0.28}) 0%, transparent 65%)` }}>
             <p className="font-serif-cine text-xl italic text-white/70">{C.heartbeat.prompt}</p>
             <p className="text-xs uppercase tracking-[0.3em] text-white/40">press & hold — mouse or touch</p>
             <motion.button
               onPointerDown={() => setHolding(true)} onPointerUp={() => setHolding(false)} onPointerLeave={() => setHolding(false)}
               className="no-select my-8 touch-none text-[9rem] leading-none md:text-[12rem]"
               animate={{ scale: 1 + holdPower * 0.35 + (holding ? 0.06 * Math.sin(Date.now() / 120) : 0) }}
-              style={{ filter: `drop-shadow(0 0 ${20 + holdPower * 60}px #ff2e63)` }}
-              aria-label="Hold my heart">
-              ❤️
+              style={{ filter: `drop-shadow(0 0 ${20 + holdPower * 60}px #e8b26a)` }}
+              aria-label="Hold the pulse">
+              ✦
             </motion.button>
             <div className="h-1.5 w-56 overflow-hidden rounded-full bg-white/10">
               <div className="h-full bg-gradient-to-r from-crimson to-rosepink" style={{ width: `${holdPower * 100}%` }} />
@@ -678,7 +678,7 @@ export default function App() {
           <motion.div key="confession" className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 px-6 text-center"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 120 }}
-              className="text-6xl" style={{ filter: 'drop-shadow(0 0 30px #ff2e63)' }}>💗</motion.div>
+              className="text-6xl" style={{ filter: 'drop-shadow(0 0 30px #e8b26a)' }}>✨</motion.div>
             <motion.h1 initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8, duration: 1.2 }}
               className="font-serif-cine mt-6 text-6xl font-semibold tracking-wide text-warmwhite text-glow-pink md:text-9xl">
               {C.confession.big}
@@ -717,7 +717,7 @@ export default function App() {
                   setFoundReasons([]); setEnvelopeOpen(false); setHeartRevealed(false); setHoldPower(0)
                   setSeedLanded(false); setStormPhase(0); setActiveMemory(null); go('opening'); setOpenStep(0)
                 }}>↺ {C.finale.replay}</GlassButton>
-                <p className="text-[11px] uppercase tracking-[0.35em] text-white/40">{C.loverName} ❤️ {C.partnerName} · {C.relationshipDate}</p>
+                <p className="text-[11px] uppercase tracking-[0.35em] text-white/40">{C.loverName} ✦ {C.partnerName} · {C.relationshipDate}</p>
                 <Guestbook />
               </div>
             </div>
@@ -743,7 +743,7 @@ function JourneyScene({ onDone }: { onDone: () => void }) {
     <motion.div key="journey" className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {/* orbiting echoes */}
-      {!reduced && ['🌸', '💗', '✨', '📸', '🌙', '❤️'].map((e, i) => (
+      {!reduced && ['☄️', '✨', '🪐', '🌙', '💫', '🌌'].map((e, i) => (
         <motion.span key={i} className="absolute text-3xl opacity-70"
           animate={{ rotate: 360 }} transition={{ duration: 14 + i * 3, repeat: Infinity, ease: 'linear' }}
           style={{ width: 260 + i * 40, height: 260 + i * 40 }}>
@@ -773,7 +773,7 @@ function StormScene({ phase, setPhase, onDone }: { phase: number; setPhase: (n: 
       <AnimatePresence mode="wait">
         {phase === 0 && (
           <motion.p key="p0" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.4 }}
-            className="font-serif-cine text-4xl md:text-6xl">YOU <span className="text-crimson">+</span> ME</motion.p>
+            className="font-serif-cine text-4xl md:text-6xl">STARDUST <span className="text-crimson">+</span> YOU</motion.p>
         )}
         {phase === 1 && (
           <motion.p key="p1" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1.3 }} exit={{ opacity: 0 }}
@@ -782,7 +782,7 @@ function StormScene({ phase, setPhase, onDone }: { phase: number; setPhase: (n: 
         {phase >= 2 && (
           <motion.div key="p2" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-6">
             <motion.div className="text-8xl md:text-9xl" animate={{ scale: [1, 1.12, 1] }} transition={{ duration: 1.4, repeat: Infinity }}
-              style={{ filter: 'drop-shadow(0 0 50px #ff2e63)' }}>❤️</motion.div>
+              style={{ filter: 'drop-shadow(0 0 50px #e8b26a)' }}>✦</motion.div>
             {phase >= 3 && (
               <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
                 <GlassButton onClick={onDone}>Toward the horizon →</GlassButton>

@@ -1,8 +1,8 @@
-# 💗 Our Love Universe
+# ✦ LUMEN — a universe, built by you
 
-A premium, fully animated, cinematic interactive love story — **not a scrolling website**, but a living romantic universe.
+A premium, fully animated, cinematic interactive creation myth — **not a scrolling website**, but a living universe the visitor builds themselves.
 
-`START → Flying Love Seed → Seed lands → Gather Starlight → First Spark → Outline → Inner Weave → Full Weave → Heartbeat Core → Ignition → Strong Wind → Star-Hearts Fly Away → Memories → Why You → Love Letter → Night Sky → Heartbeat → Final Journey → I LOVE YOU → Heart Storm → Finale`
+`START → Falling Spark → Spark lands → Gather Starlight → First Spark → Outline → Inner Weave → Full Weave → Heartbeat Core → Ignition → Sparks Fly Away → Worlds → Why Anything? → The First Message → Night Sky → Pulse → Final Journey → IT WAS YOU. → Star Storm → Finale`
 
 ## ✨ Key rules (as requested)
 
@@ -35,8 +35,8 @@ Build with `npm run build` and preview with `npm run preview`.
 | `GET /api/health` | liveness check |
 | `GET /api/config` | whole story content as JSON (mirrors `loveConfig.ts`) |
 | `PUT /api/config` | update story content — owner only (`x-admin-token` header = `ADMIN_TOKEN`) |
-| `GET /api/notes` | love-notes wall, newest first |
-| `POST /api/notes` | leave a note `{name, message}` (validated + rate-limited) |
+| `GET /api/notes` | marks left on the universe, newest first |
+| `POST /api/notes` | leave a mark `{name, message}` (validated + rate-limited) |
 | `GET /api/visits` | increments + returns the visit counter |
 
 Run it together with the site:
@@ -48,7 +48,7 @@ npm run server   # serves API + site on http://localhost:3001
 ```
 
 Set `ADMIN_TOKEN` env var to protect story edits. The finale scene includes a
-“Leave a love note 💌” wall and a visit counter, both powered by this API —
+“Leave a mark on the universe 💫” wall and a visit counter, both powered by this API —
 and both degrade gracefully when the site is served statically without it.
 
 ## 🌍 Deploy (permanent live URL)
@@ -63,7 +63,7 @@ One-command options (builds `dist/`, then starts `server/index.js`):
 
 ```
 src/
-  loveConfig.ts            ← personalize everything here
+  loveConfig.ts            ← personalize the whole story here
   App.tsx                  ← cinematic scene machine (14 scenes)
   components/
     Starfield.tsx          ← living ambient universe canvas

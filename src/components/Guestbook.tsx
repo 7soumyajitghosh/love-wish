@@ -27,27 +27,27 @@ export default function Guestbook() {
     if (res?.note) {
       setNotes((n) => [res.note, ...n].slice(0, 100))
       setMessage('')
-      setHint('Your note joined our universe 💗')
+      setHint('Your mark joined the universe 💫')
     } else {
-      setHint('Could not reach the backend — your love still counts ❤️')
+      setHint('Could not reach the backend — your mark still counts ✦')
     }
   }
 
   return (
     <div className="glass w-full max-w-md rounded-3xl p-5 text-left">
       <p className="text-center font-serif-cine text-xl italic text-warmwhite">
-        Leave a love note 💌
+        Leave a mark on the universe 💫
       </p>
       {visits != null && (
         <p className="mt-1 text-center text-[11px] uppercase tracking-[0.3em] text-white/40">
-          this story has been opened {visits} {visits === 1 ? 'time' : 'times'}
+          this universe has been visited {visits} {visits === 1 ? 'time' : 'times'}
         </p>
       )}
       <div className="mt-3 flex gap-2">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
+          placeholder="Your name, traveler"
           maxLength={40}
           className="w-28 rounded-full bg-white/10 px-3 py-2 text-sm text-warmwhite placeholder-white/30 outline-none focus:bg-white/15"
         />
@@ -55,7 +55,7 @@ export default function Guestbook() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && submit()}
-          placeholder="Write something sweet…"
+          placeholder="Carve something into the dark…"
           maxLength={500}
           className="flex-1 rounded-full bg-white/10 px-3 py-2 text-sm text-warmwhite placeholder-white/30 outline-none focus:bg-white/15"
         />
@@ -64,7 +64,7 @@ export default function Guestbook() {
           disabled={sending}
           className="rounded-full bg-crimson/70 px-4 py-2 text-sm text-white transition hover:bg-crimson disabled:opacity-50"
         >
-          {sending ? '…' : '❤️'}
+          {sending ? '…' : '✦'}
         </button>
       </div>
       {hint && <p className="mt-2 text-center text-xs text-rosepink">{hint}</p>}

@@ -69,7 +69,7 @@ app.put('/api/config', (req, res) => {
   res.json({ ok: true });
 });
 
-// ── Love-notes wall (guestbook) ──
+// ── Marks on the universe (guestbook) ──
 app.get('/api/notes', (_req, res) => {
   const all = notesStore.read();
   res.json({ notes: all.slice(-100).reverse() });
