@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        abyss: '#050308',
-        burgundy: '#4a0e1e',
-        crimson: '#c9184a',
-        rosepink: '#ff8fa3',
-        warmwhite: '#fff5ec',
+        abyss: '#0a0a24',
+        burgundy: '#3b1f5e',
+        crimson: '#ef5d92',
+        rosepink: '#ffc9a3',
+        warmwhite: '#fff8ee',
         gold: '#e8b26a',
       },
       fontFamily: {

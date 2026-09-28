@@ -27,27 +27,27 @@ export default function Guestbook() {
     if (res?.note) {
       setNotes((n) => [res.note, ...n].slice(0, 100))
       setMessage('')
-      setHint('Your mark joined the universe 💫')
+      setHint('Your footprint joined the morning 🌅')
     } else {
-      setHint('Could not reach the backend — your mark still counts ✦')
+      setHint('Could not reach the backend — the morning heard you anyway ☀')
     }
   }
 
   return (
     <div className="glass w-full max-w-md rounded-3xl p-5 text-left">
       <p className="text-center font-serif-cine text-xl italic text-warmwhite">
-        Leave a mark on the universe 💫
+        Leave a footprint in the morning 🌅
       </p>
       {visits != null && (
         <p className="mt-1 text-center text-[11px] uppercase tracking-[0.3em] text-white/40">
-          this universe has been visited {visits} {visits === 1 ? 'time' : 'times'}
+          this morning has been woken {visits} {visits === 1 ? 'time' : 'times'}
         </p>
       )}
       <div className="mt-3 flex gap-2">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name, traveler"
+          placeholder="Your name, early bird"
           maxLength={40}
           className="w-28 rounded-full bg-white/10 px-3 py-2 text-sm text-warmwhite placeholder-white/30 outline-none focus:bg-white/15"
         />
@@ -55,7 +55,7 @@ export default function Guestbook() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && submit()}
-          placeholder="Carve something into the dark…"
+          placeholder="Say it before the coffee cools…"
           maxLength={500}
           className="flex-1 rounded-full bg-white/10 px-3 py-2 text-sm text-warmwhite placeholder-white/30 outline-none focus:bg-white/15"
         />

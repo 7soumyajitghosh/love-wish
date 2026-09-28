@@ -337,7 +337,7 @@ export default function App() {
       <AnimatePresence mode="wait">
         {/* ── 1. OPENING ── */}
         {scene === 'opening' && (
-          <motion.div key="opening" className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black px-6 text-center"
+          <motion.div key="opening" className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#070718] px-6 text-center"
             exit={{ opacity: 0, scale: 1.15, filter: 'blur(8px)' }} transition={{ duration: 1.4 }}>
             <AnimatePresence>
               {openStep === 1 && (
@@ -354,7 +354,7 @@ export default function App() {
                   <p className="text-xs uppercase tracking-[0.4em] text-white/50">{C.loverName} × {C.partnerName}</p>
                   {openStep >= 4 && (
                     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
-                      <GlassButton onClick={() => { setAudioOn(true); sound.setEnabled(true); go('seed') }}>✨ Begin Creation ✨</GlassButton>
+                      <GlassButton onClick={() => { setAudioOn(true); sound.setEnabled(true); go('seed') }}>🌅 Begin the Morning</GlassButton>
                     </motion.div>
                   )}
                 </motion.div>
@@ -401,8 +401,8 @@ export default function App() {
               style={{ boxShadow: '0 0 40px rgba(180,140,255,.4)' }} />
             {seedLanded && (
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="z-10 flex flex-col items-center gap-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">the seed has found its sky</p>
-                <GlassButton onClick={() => go('grow')}>Wake the stars ✨</GlassButton>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">the spark is ready</p>
+                <GlassButton onClick={() => go('grow')}>Wake the morning ☀</GlassButton>
               </motion.div>
             )}
           </motion.div>
@@ -477,7 +477,7 @@ export default function App() {
                 className="font-serif-cine mt-3 text-xl italic text-rosepink md:text-2xl">{C.bloom.line2} {C.bloom.line3}</motion.p>
               {bloom > 0.85 && (
                 <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
-                  <GlassButton onClick={() => go('wind')}>Release it to the dark 🌌</GlassButton>
+                  <GlassButton onClick={() => go('wind')}>Open the curtains 🌅</GlassButton>
                 </motion.div>
               )}
             </div>
@@ -490,8 +490,8 @@ export default function App() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.p className="font-serif-cine max-w-2xl text-2xl italic md:text-4xl"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
-              The sparks refuse to stay —<br />
-              <span className="text-rosepink">but nothing ever truly leaves. It travels.</span>
+              The light refuses to stay —<br />
+              <span className="text-rosepink">but dawn belongs to everyone. It travels.</span>
             </motion.p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="mt-8">
               <GlassButton onClick={() => go('memories')}>Follow the sparks 💫</GlassButton>
@@ -503,8 +503,8 @@ export default function App() {
         {scene === 'memories' && (
           <motion.div key="memories" className="absolute inset-0 z-10 overflow-hidden px-4 pb-24 pt-20"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <p className="text-center font-serif-cine text-2xl italic md:text-3xl">Worlds, <span className="text-rosepink">so far</span></p>
-            <p className="mt-1 text-center text-xs uppercase tracking-[0.3em] text-white/50">touch a world to visit it</p>
+            <p className="text-center font-serif-cine text-2xl italic md:text-3xl">The light lands <span className="text-rosepink">first on…</span></p>
+            <p className="mt-1 text-center text-xs uppercase tracking-[0.3em] text-white/50">touch a place to stand in it</p>
             <div className="relative mx-auto mt-6 h-[52vh] max-w-4xl">
               {C.memories.map((m, i) => (
                 <motion.button
@@ -773,7 +773,7 @@ function StormScene({ phase, setPhase, onDone }: { phase: number; setPhase: (n: 
       <AnimatePresence mode="wait">
         {phase === 0 && (
           <motion.p key="p0" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.4 }}
-            className="font-serif-cine text-4xl md:text-6xl">STARDUST <span className="text-crimson">+</span> YOU</motion.p>
+            className="font-serif-cine text-4xl md:text-6xl">DARK <span className="text-crimson">+</span> DAWN</motion.p>
         )}
         {phase === 1 && (
           <motion.p key="p1" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1.3 }} exit={{ opacity: 0 }}

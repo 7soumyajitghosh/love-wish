@@ -44,18 +44,18 @@ export default function Starfield({ intensity = 1, wind = 1 }: { intensity?: num
       t += 0.01
       ctx.clearRect(0, 0, w, h)
 
-      // deep gradient
+      // deep indigo night melting into dawn
       const g = ctx.createRadialGradient(w / 2, h * 0.75, 0, w / 2, h * 0.55, Math.max(w, h) * 0.9)
-      g.addColorStop(0, '#1a0714')
-      g.addColorStop(0.45, '#0a0410')
-      g.addColorStop(1, '#050308')
+      g.addColorStop(0, '#2a2358')
+      g.addColorStop(0.45, '#121032')
+      g.addColorStop(1, '#0a0a24')
       ctx.fillStyle = g
       ctx.fillRect(0, 0, w, h)
 
-      // distant glow horizon
+      // sunrise glow on the horizon
       const hg = ctx.createRadialGradient(w / 2, h * 1.05, 0, w / 2, h * 1.05, w * 0.6)
-      hg.addColorStop(0, 'rgba(201,24,74,0.16)')
-      hg.addColorStop(1, 'rgba(201,24,74,0)')
+      hg.addColorStop(0, 'rgba(255,170,120,0.20)')
+      hg.addColorStop(1, 'rgba(255,170,120,0)')
       ctx.fillStyle = hg
       ctx.fillRect(0, 0, w, h)
 
@@ -66,9 +66,9 @@ export default function Starfield({ intensity = 1, wind = 1 }: { intensity?: num
         for (let i = 0; i < 3; i++) {
           const fy = h * (0.3 + i * 0.22) + Math.sin(t * (0.6 + i * 0.2) + i * 2) * 18
           const fg = ctx.createLinearGradient(0, fy - 60, 0, fy + 60)
-          fg.addColorStop(0, 'rgba(255,143,163,0)')
-          fg.addColorStop(0.5, 'rgba(255,143,163,0.5)')
-          fg.addColorStop(1, 'rgba(255,143,163,0)')
+          fg.addColorStop(0, 'rgba(255,190,150,0)')
+          fg.addColorStop(0.5, 'rgba(255,190,150,0.5)')
+          fg.addColorStop(1, 'rgba(255,190,150,0)')
           ctx.fillStyle = fg
           ctx.fillRect(0, fy - 60, w, 120)
         }

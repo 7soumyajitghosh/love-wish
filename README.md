@@ -1,8 +1,8 @@
-# ✦ LUMEN — a universe, built by you
+# ☀ DAYBREAK — the morning we made
 
-A premium, fully animated, cinematic interactive creation myth — **not a scrolling website**, but a living universe the visitor builds themselves.
+A premium, fully animated, cinematic interactive story about the longest night — and the morning you bring back. **Not a scrolling website**, but one continuous dawn you help rise.
 
-`START → Falling Spark → Spark lands → Gather Starlight → First Spark → Outline → Inner Weave → Full Weave → Heartbeat Core → Ignition → Sparks Fly Away → Worlds → Why Anything? → The First Message → Night Sky → Pulse → Final Journey → IT WAS YOU. → Star Storm → Finale`
+`START → Falling Spark → Spark lands → Gather Light → First Glow → Pale Gold → Rose Band → Sun Edge → Full Disc → Daybreak → Light Travels → First Places → Why Morning? → The Night's Letter → Last Stars → Hold the Warmth → Final Journey → GOOD MORNING. → Sun Storm → Finale`
 
 ## ✨ Key rules (as requested)
 
@@ -35,8 +35,8 @@ Build with `npm run build` and preview with `npm run preview`.
 | `GET /api/health` | liveness check |
 | `GET /api/config` | whole story content as JSON (mirrors `loveConfig.ts`) |
 | `PUT /api/config` | update story content — owner only (`x-admin-token` header = `ADMIN_TOKEN`) |
-| `GET /api/notes` | marks left on the universe, newest first |
-| `POST /api/notes` | leave a mark `{name, message}` (validated + rate-limited) |
+| `GET /api/notes` | footprints left in the morning, newest first |
+| `POST /api/notes` | leave a footprint `{name, message}` (validated + rate-limited) |
 | `GET /api/visits` | increments + returns the visit counter |
 
 Run it together with the site:
@@ -48,7 +48,7 @@ npm run server   # serves API + site on http://localhost:3001
 ```
 
 Set `ADMIN_TOKEN` env var to protect story edits. The finale scene includes a
-“Leave a mark on the universe 💫” wall and a visit counter, both powered by this API —
+“Leave a footprint in the morning 🌅” wall and a woken-morning counter, both powered by this API —
 and both degrade gracefully when the site is served statically without it.
 
 ## 🌍 Deploy (permanent live URL)
