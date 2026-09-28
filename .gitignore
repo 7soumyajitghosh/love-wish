@@ -4,6 +4,10 @@ dist/
 dist-ssr/
 *.local
 
+# runtime backend data (personal notes & counters — never commit)
+server/data/notes.json
+server/data/visits.json
+
 # vite
 .vite/
 

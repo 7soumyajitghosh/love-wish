@@ -26,6 +26,39 @@ Then open the printed local URL (default `http://localhost:5173`).
 
 Build with `npm run build` and preview with `npm run preview`.
 
+## 💌 Backend (Express API + static host)
+
+`server/` holds a small Express backend (ESM, zero native deps, JSON-file storage):
+
+| Endpoint | Description |
+|---|---|
+| `GET /api/health` | liveness check |
+| `GET /api/config` | whole story content as JSON (mirrors `loveConfig.ts`) |
+| `PUT /api/config` | update story content — owner only (`x-admin-token` header = `ADMIN_TOKEN`) |
+| `GET /api/notes` | love-notes wall, newest first |
+| `POST /api/notes` | leave a note `{name, message}` (validated + rate-limited) |
+| `GET /api/visits` | increments + returns the visit counter |
+
+Run it together with the site:
+
+```bash
+npm install
+npm run build    # frontend → dist/
+npm run server   # serves API + site on http://localhost:3001
+```
+
+Set `ADMIN_TOKEN` env var to protect story edits. The finale scene includes a
+“Leave a love note 💌” wall and a visit counter, both powered by this API —
+and both degrade gracefully when the site is served statically without it.
+
+## 🌍 Deploy (permanent live URL)
+
+One-command options (builds `dist/`, then starts `server/index.js`):
+
+- **Render:** import the repo — `render.yaml` is included (Docker, free plan, `/api/health` check).
+- **Railway / Fly.io / any Docker host:** `Dockerfile` is included (`EXPOSE 3001`).
+- **VPS:** `npm install && npm run build`, then run `npm start` behind nginx/Caddy with `PORT` + `ADMIN_TOKEN` set.
+
 ## 🗂 Structure
 
 ```

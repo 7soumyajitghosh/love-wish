@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Starfield from './components/Starfield'
 import HeartTreeCanvas from './components/HeartTreeCanvas'
+import Guestbook from './components/Guestbook'
 import { loveConfig as C } from './loveConfig'
 import { sound, drawHeart } from './utils/helpers'
 import { useCursorGlow, useReducedMotion } from './hooks/hooks'
@@ -773,10 +774,10 @@ export default function App() {
 
         {/* ── 14. FINALE ── */}
         {scene === 'finale' && (
-          <motion.div key="finale" className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
+          <motion.div key="finale" className="absolute inset-0 z-10 flex flex-col items-center justify-center overflow-y-auto px-6 text-center"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div className="absolute inset-x-0 bottom-[10%] top-[30%] opacity-60"><HeartTreeCanvas growth={1} bloom={0.7} windAmp={0.7} /></div>
-            <div className="relative z-10 flex flex-col items-center gap-4">
+            <div className="relative z-10 flex max-h-full flex-col items-center gap-4 overflow-y-auto py-10">
               <p className="font-serif-cine text-xl italic md:text-2xl">{C.finale.line1}</p>
               <p className="font-serif-cine text-xl italic text-rosepink md:text-2xl">{C.finale.line2}</p>
               <p className="mt-4 text-2xl tracking-[0.3em]">{C.finale.end}</p>
@@ -789,6 +790,7 @@ export default function App() {
                   setSeedLanded(false); setStormPhase(0); setActiveMemory(null); go('opening'); setOpenStep(0)
                 }}>↺ {C.finale.replay}</GlassButton>
                 <p className="text-[11px] uppercase tracking-[0.35em] text-white/40">{C.loverName} ❤️ {C.partnerName} · {C.relationshipDate}</p>
+                <Guestbook />
               </div>
             </div>
           </motion.div>

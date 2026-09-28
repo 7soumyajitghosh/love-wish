@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { mulberry32, drawHeart, prefersReducedMotion } from '../../utils/helpers'
+import { mulberry32, drawHeart, prefersReducedMotion } from '../utils/helpers'
 
 type Branch = {
   x: number; y: number; angle: number; len: number; width: number;

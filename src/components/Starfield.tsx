@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { prefersReducedMotion } from '../../utils/helpers'
+import { prefersReducedMotion } from '../utils/helpers'
 
 type P = {
   x: number; y: number; r: number; vy: number; vx: number;

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: love-universe
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: ADMIN_TOKEN
+        generateValue: true
