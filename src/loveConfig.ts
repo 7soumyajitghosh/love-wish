@@ -7,7 +7,7 @@ export const loveConfig = {
   loverName: 'Your Name',
   partnerName: 'My Love',
   relationshipDate: 'Every day since we met',
-  tagline: 'grown with love',
+  tagline: 'written in the stars',
 
   colors: {
     bg: '#050308',
@@ -20,28 +20,28 @@ export const loveConfig = {
 
   opening: {
     line1: 'Some stories are written with words…',
-    line2: '…and some are grown with love.',
+    line2: '…and some are written in the stars.',
     line3: 'This is ours.',
   },
 
   seed: {
     line1: 'Every beautiful thing starts with something small.',
     line2: 'Even love.',
-    wateringPrompt: 'Give it a little love.',
-    wateringHint: 'Drag the watering can over the soil — on mobile, touch & drag.',
+    gatherPrompt: 'Gather a little starlight.',
+    gatherHint: 'Drag the moon lantern through the drifting sparks — on mobile, touch & drag.',
   },
 
   growthStages: [
-    { name: 'Roots', caption: 'Love takes root where it is cared for.' },
-    { name: 'Trunk', caption: 'Something strong is rising.' },
-    { name: 'Branches', caption: 'We reach for each other.' },
-    { name: 'Twigs & Buds', caption: 'Tiny promises appear.' },
-    { name: 'Heart Leaves', caption: 'Every leaf beats like a heart.' },
-    { name: 'Full Bloom', caption: 'Look what a little love can grow.' },
+    { name: 'First Spark', caption: 'A single light wakes in the dark.' },
+    { name: 'Outline', caption: 'The shape of us begins to show.' },
+    { name: 'Inner Weave', caption: 'Every line pulls us closer.' },
+    { name: 'Full Weave', caption: 'Two halves, one pattern.' },
+    { name: 'Heartbeat Core', caption: 'Something at the center starts to beat.' },
+    { name: 'Ignition', caption: 'Look what a little love can light.' },
   ],
 
   bloom: {
-    line1: 'Look what a little love can grow.',
+    line1: 'Look what a little love can light.',
     line2: 'And this…',
     line3: '…is only the beginning.',
   },
@@ -132,8 +132,8 @@ export const loveConfig = {
       'You are my calm and my adventure,',
       'my quiet morning and my wildest dream.',
       '',
-      'If love is a garden, you are both',
-      'the seed and the sunlight.',
+      'If love is a night sky, you are both',
+      'the darkness and the dawn.',
       'I will keep choosing you —',
       'in every lifetime, in every universe.',
     ],

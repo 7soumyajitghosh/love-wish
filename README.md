@@ -2,13 +2,13 @@
 
 A premium, fully animated, cinematic interactive love story — **not a scrolling website**, but a living romantic universe.
 
-`START → Flying Love Seed → Seed lands → Watering → Roots → Trunk → Branches → Twigs → Buds → ❤️ Leaves → Full Bloom → Strong Wind → Hearts Fly Away → Memories → Why You → Love Letter → Night Sky → Heartbeat → Final Journey → I LOVE YOU → Heart Storm → Finale`
+`START → Flying Love Seed → Seed lands → Gather Starlight → First Spark → Outline → Inner Weave → Full Weave → Heartbeat Core → Ignition → Strong Wind → Star-Hearts Fly Away → Memories → Why You → Love Letter → Night Sky → Heartbeat → Final Journey → I LOVE YOU → Heart Storm → Finale`
 
 ## ✨ Key rules (as requested)
 
-- **Tree growth is interaction-driven, never scroll-driven.** Drag the watering can over the soil; each full watering advances one growth stage. Scrolling/wheel only moves between already-completed scenes.
-- **Real procedural animation, no video, no pop-in SVG.** The Heart Tree is drawn progressively on canvas with organic easing, sway, pollen, light and heart leaves.
-- **Watering visibly matters:** curved droplet trajectories, soil darkening, seed glow, moisture meter, growth lock during animation.
+- **Awakening is interaction-driven, never scroll-driven.** Drag the moon lantern through drifting sparks; each full meter of starlight awakens one constellation layer. Scrolling/wheel only moves between already-completed scenes.
+- **Real procedural animation, no video, no pop-in SVG.** The Heart Constellation ignites progressively on canvas with organic easing, twinkle, web lines, a beating core and rising embers.
+- **Gathering visibly matters:** nearby sparks stream into the lantern, the starlight meter fills, stages lock during each awakening.
 - **Cinematic transitions:** fades, heart-zooms, flying-heart scene bridges, letterbox bars, film grain, vignette.
 - **Mobile-first touch:** drag can, tap memories, hold-to-water button, press-and-hold heartbeat.
 - **Audio starts only after user gesture.** Synthesized WebAudio (no files needed): chimes, water, heartbeat, envelope, generative melody. `🎵 Play Our Song` / mute controls included.
@@ -67,7 +67,7 @@ src/
   App.tsx                  ← cinematic scene machine (14 scenes)
   components/
     Starfield.tsx          ← living ambient universe canvas
-    HeartTreeCanvas.tsx    ← procedural interactive Heart Tree
+    HeartConstellationCanvas.tsx ← procedural Heart Constellation + starlight gathering
   hooks/hooks.ts           ← reduced-motion, cursor glow
   utils/helpers.ts         ← seeded RNG, heart drawing, synth sound engine
   index.css / main.tsx

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Starfield from './components/Starfield'
-import HeartTreeCanvas from './components/HeartTreeCanvas'
+import HeartConstellationCanvas from './components/HeartConstellationCanvas'
 import Guestbook from './components/Guestbook'
 import { loveConfig as C } from './loveConfig'
 import { sound, drawHeart } from './utils/helpers'
@@ -14,7 +14,7 @@ const SCENES = [
 ] as const
 type Scene = (typeof SCENES)[number]
 
-const GROWTH_TARGETS = [0.16, 0.32, 0.55, 0.72, 0.9, 1.0]
+const AWAKEN_TARGETS = [0.16, 0.32, 0.55, 0.72, 0.9, 1.0]
 
 function GlassButton({ children, onClick, className = '' }: { children: React.ReactNode; onClick?: () => void; className?: string }) {
   return (
@@ -27,69 +27,6 @@ function GlassButton({ children, onClick, className = '' }: { children: React.Re
       {children}
     </motion.button>
   )
-}
-
-// ── Water droplets overlay ──
-function WaterOverlay({ pouring, fromX, fromY, toX, toY, onDrop }: {
-  pouring: boolean; fromX: number; fromY: number; toX: number; toY: number; onDrop: () => void;
-}) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  const pourRef = useRef(pouring)
-  pourRef.current = pouring
-  const geomRef = useRef({ fromX, fromY, toX, toY })
-  geomRef.current = { fromX, fromY, toX, toY }
-  const cbRef = useRef(onDrop)
-  cbRef.current = onDrop
-
-  useEffect(() => {
-    const canvas = ref.current!
-    const ctx = canvas.getContext('2d')!
-    let w = 0, h = 0, raf = 0
-    const DPR = Math.min(window.devicePixelRatio || 1, 2)
-    const resize = () => {
-      const r = canvas.parentElement!.getBoundingClientRect()
-      w = r.width; h = r.height
-      canvas.width = w * DPR; canvas.height = h * DPR
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-    type D = { x: number; y: number; vx: number; vy: number; r: number }
-    let drops: D[] = []
-    const frame = () => {
-      ctx.clearRect(0, 0, w, h)
-      const g = geomRef.current
-      const fx = g.fromX * w, fy = g.fromY * h, tx = g.toX * w, ty = g.toY * h
-      if (pourRef.current && drops.length < 160) {
-        for (let i = 0; i < 3; i++) {
-          drops.push({ x: fx + (Math.random() - 0.5) * 8, y: fy, vx: (tx - fx) * 0.015 + (Math.random() - 0.5) * 1.2, vy: 1 + Math.random() * 1.5, r: 1.5 + Math.random() * 2.5 })
-        }
-        if (Math.random() < 0.1) sound.water()
-      }
-      drops = drops.filter((d) => d.y < h + 20)
-      for (const d of drops) {
-        d.vy += 0.12
-        d.x += d.vx
-        d.y += d.vy
-        ctx.fillStyle = 'rgba(140,210,255,0.85)'
-        ctx.shadowColor = '#7cc7ff'
-        ctx.shadowBlur = 8
-        ctx.beginPath()
-        ctx.ellipse(d.x, d.y, d.r * 0.7, d.r, 0, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.shadowBlur = 0
-        const dx = d.x - tx, dy = d.y - ty
-        if (dx * dx + dy * dy < 900) {
-          d.y = h + 30
-          cbRef.current()
-        }
-      }
-      raf = requestAnimationFrame(frame)
-    }
-    raf = requestAnimationFrame(frame)
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize) }
-  }, [])
-  return <canvas ref={ref} className="pointer-events-none absolute inset-0 h-full w-full" />
 }
 
 // ── Flying hearts burst overlay (wind / storm) ──
@@ -153,17 +90,16 @@ export default function App() {
   const [openStep, setOpenStep] = useState(0)
   // seed flight
   const [seedLanded, setSeedLanded] = useState(false)
-  // growth
-  const [waters, setWaters] = useState(0)
+  // awakening
+  const [awakenings, setAwakenings] = useState(0)
   const [growth, setGrowth] = useState(0.02)
-  const [moisture, setMoisture] = useState(0)
+  const [starlight, setStarlight] = useState(0)
   const [locked, setLocked] = useState(false)
-  const [pouring, setPouring] = useState(false)
-  const [can, setCan] = useState({ x: 0.78, y: 0.3 })
+  const [gathering, setGathering] = useState(false)
+  const [lantern, setLantern] = useState({ x: 0.5, y: 0.4 })
   const [bloom, setBloom] = useState(0)
-  const [soilDark, setSoilDark] = useState(0)
   const dragging = useRef(false)
-  const pourHold = useRef(false)
+  const holdGather = useRef(false)
 
   // memories
   const [activeMemory, setActiveMemory] = useState<string | null>(null)
@@ -226,9 +162,10 @@ export default function App() {
     return () => clearTimeout(t)
   }, [scene, reduced])
 
-  // growth tween helper
-  const tweenGrowth = (from: number, to: number) => {
+  // awakening tween helper
+  const tweenAwaken = (from: number, to: number) => {
     setLocked(true)
+    setGathering(false)
     const start = performance.now()
     const dur = reduced ? 600 : 2600
     const step = (now: number) => {
@@ -241,34 +178,33 @@ export default function App() {
     requestAnimationFrame(step)
   }
 
-  const moistureRef = useRef(0)
+  const lightRef = useRef(0)
   const advancingRef = useRef(false)
+  const collectCount = useRef(0)
 
-  const handleDrop = useCallback(() => {
-    if (locked || advancingRef.current) {
-      setSoilDark((s) => Math.min(1, s + 0.002))
-      return
-    }
-    setSoilDark((s) => Math.min(1, s + 0.004))
-    moistureRef.current = Math.min(100, moistureRef.current + 1.6)
-    setMoisture(moistureRef.current)
-    if (moistureRef.current >= 100 && waters < GROWTH_TARGETS.length) {
+  const handleCollect = useCallback(() => {
+    if (locked || advancingRef.current) return
+    lightRef.current = Math.min(100, lightRef.current + 5)
+    setStarlight(lightRef.current)
+    collectCount.current += 1
+    if (collectCount.current % 3 === 0) sound.twinkle()
+    if (lightRef.current >= 100 && awakenings < AWAKEN_TARGETS.length) {
       advancingRef.current = true
-      const target = GROWTH_TARGETS[waters]
+      const target = AWAKEN_TARGETS[awakenings]
       const from = growth
-      const done = waters + 1
-      moistureRef.current = 0
-      setMoisture(0)
-      setWaters((w) => w + 1)
-      tweenGrowth(from, target)
+      const done = awakenings + 1
+      lightRef.current = 0
+      setStarlight(0)
+      setAwakenings((w) => w + 1)
+      tweenAwaken(from, target)
       sound.chime()
       setTimeout(() => { advancingRef.current = false }, reduced ? 700 : 2800)
-      if (done >= GROWTH_TARGETS.length) {
+      if (done >= AWAKEN_TARGETS.length) {
         setTimeout(() => go('bloom'), reduced ? 800 : 3200)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locked, waters, growth, reduced, go])
+  }, [locked, awakenings, growth, reduced, go])
 
   // bloom ramp
   useEffect(() => {
@@ -343,31 +279,24 @@ export default function App() {
     if (on) sound.chime()
   }
 
-  const overSoil = useMemo(() => {
-    const dx = can.x - 0.5, dy = can.y - 0.72
-    return dx * dx + dy * dy < 0.035
-  }, [can])
-
-  useEffect(() => {
-    setPouring(overSoil && !locked && (dragging.current || pourHold.current))
-  }, [overSoil, locked])
-
-  // pointer drag for watering can
-  const onCanPointerDown = (e: React.PointerEvent) => {
+  // pointer drag for the moon lantern
+  const onLanternPointerDown = (e: React.PointerEvent) => {
     dragging.current = true
+    if (!locked) setGathering(true)
     ;(e.target as HTMLElement).setPointerCapture?.(e.pointerId)
   }
   const onStagePointerMove = (e: React.PointerEvent) => {
     if (!dragging.current) return
     const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
-    setCan({
+    setLantern({
       x: Math.min(0.95, Math.max(0.05, (e.clientX - r.left) / r.width)),
       y: Math.min(0.9, Math.max(0.05, (e.clientY - r.top) / r.height)),
     })
+    if (!locked) setGathering(true)
   }
-  const onStagePointerUp = () => { dragging.current = false; pourHold.current = false; setPouring(false) }
+  const onStagePointerUp = () => { dragging.current = false; holdGather.current = false; setGathering(false) }
 
-  const stageCaption = waters < C.growthStages.length ? C.growthStages[waters] : C.growthStages[C.growthStages.length - 1]
+  const stageCaption = awakenings < C.growthStages.length ? C.growthStages[awakenings] : C.growthStages[C.growthStages.length - 1]
 
   return (
     <div className="cine-vignette film-grain relative h-full w-full overflow-hidden bg-abyss">
@@ -467,70 +396,69 @@ export default function App() {
                   animate={{ scale: [1, 1.4], opacity: [0.7, 0] }} transition={{ duration: 1.6, repeat: Infinity }} />
               </motion.div>
             )}
-            {/* soil patch */}
-            <div className="absolute bottom-[16%] left-1/2 h-10 w-64 -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#5b2a1e] to-[#241016] opacity-90"
-              style={{ boxShadow: '0 0 40px rgba(201,24,74,.35)' }} />
+            {/* pool of starlight */}
+            <div className="absolute bottom-[16%] left-1/2 h-10 w-64 -translate-x-1/2 rounded-[50%] bg-gradient-to-b from-[#3b2a5e] to-[#120a24] opacity-90"
+              style={{ boxShadow: '0 0 40px rgba(180,140,255,.4)' }} />
             {seedLanded && (
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="z-10 flex flex-col items-center gap-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">the seed has found its home</p>
-                <GlassButton onClick={() => go('grow')}>Tend to it 🌱</GlassButton>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">the seed has found its sky</p>
+                <GlassButton onClick={() => go('grow')}>Wake the stars ✨</GlassButton>
               </motion.div>
             )}
           </motion.div>
         )}
 
-        {/* ── 3. GROW (watering + tree) ── */}
+        {/* ── 3. AWAKEN (gather starlight + constellation) ── */}
         {scene === 'grow' && (
           <motion.div key="grow" className="absolute inset-0 z-10"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}
             onPointerMove={onStagePointerMove} onPointerUp={onStagePointerUp} onPointerLeave={onStagePointerUp}>
             <div className="absolute left-1/2 top-[9%] w-full max-w-2xl -translate-x-1/2 px-6 text-center">
-              <p className="font-serif-cine text-2xl italic text-warmwhite md:text-3xl">{C.seed.wateringPrompt}</p>
-              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-white/50">{locked ? `growing ${stageCaption.name}…` : stageCaption.caption}</p>
-              <p className="mt-1 text-[11px] text-white/40">{C.seed.wateringHint}</p>
-              {/* moisture meter */}
+              <p className="font-serif-cine text-2xl italic text-warmwhite md:text-3xl">{C.seed.gatherPrompt}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-white/50">{locked ? `awakening ${stageCaption.name}…` : stageCaption.caption}</p>
+              <p className="mt-1 text-[11px] text-white/40">{C.seed.gatherHint}</p>
+              {/* starlight meter */}
               <div className="mx-auto mt-3 h-1.5 w-56 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-gradient-to-r from-sky-300 to-rosepink transition-all" style={{ width: `${moisture}%` }} />
+                <div className="h-full rounded-full bg-gradient-to-r from-amber-200 via-rosepink to-gold transition-all" style={{ width: `${starlight}%` }} />
               </div>
               <div className="mt-2 flex items-center justify-center gap-2 text-xs text-white/60">
                 {C.growthStages.map((s, i) => (
-                  <span key={s.name} className={`rounded-full px-2 py-0.5 ${i < waters ? 'bg-crimson/60 text-white' : i === waters ? 'bg-white/15 text-rosepink' : 'bg-white/5'}`}>
-                    {i < waters ? '❤️' : '·'} {s.name}
+                  <span key={s.name} className={`rounded-full px-2 py-0.5 ${i < awakenings ? 'bg-crimson/60 text-white' : i === awakenings ? 'bg-white/15 text-rosepink' : 'bg-white/5'}`}>
+                    {i < awakenings ? '✨' : '·'} {s.name}
                   </span>
                 ))}
               </div>
             </div>
 
             <div className="absolute inset-x-0 bottom-[8%] top-[26%]">
-              <HeartTreeCanvas growth={growth} bloom={0} windAmp={1} />
-              <WaterOverlay pouring={pouring} fromX={can.x} fromY={can.y + 0.04} toX={0.5} toY={0.62} onDrop={handleDrop} />
-              {/* soil darkness overlay */}
-              <div className="pointer-events-none absolute bottom-[6%] left-1/2 h-12 w-72 -translate-x-1/2 rounded-[50%] bg-black transition-opacity"
-                style={{ opacity: soilDark * 0.45 }} />
-              {/* watering can */}
+              <HeartConstellationCanvas growth={growth} bloom={0} lantern={lantern} gathering={gathering} interactive onCollect={handleCollect} />
+              {/* moon lantern */}
               <motion.div
-                className="touch-none-all absolute z-20 cursor-grab touch-none select-none text-5xl md:text-6xl"
-                style={{ left: `calc(${can.x * 100}% - 28px)`, top: `calc(${can.y * 100}% - 28px)`, filter: 'drop-shadow(0 0 16px rgba(140,210,255,.8))' }}
-                onPointerDown={onCanPointerDown}
-                animate={pouring ? { rotate: [0, -18, -18], x: [0, 0] } : { rotate: 0 }}
+                className="touch-none-all absolute z-20 cursor-grab touch-none select-none"
+                style={{ left: `calc(${lantern.x * 100}% - 26px)`, top: `calc(${lantern.y * 100}% - 26px)` }}
+                onPointerDown={onLanternPointerDown}
+                animate={gathering ? { scale: 1.12 } : { scale: 1 }}
                 whileHover={{ scale: 1.1 }}>
-                🚰
-                {overSoil && !locked && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[10px] tracking-widest text-sky-200">POURING 💧</div>}
+                <div className="glass glow-btn flex h-[52px] w-[52px] items-center justify-center rounded-full text-3xl"
+                  style={{ filter: 'drop-shadow(0 0 18px rgba(255,220,150,.8))' }}>
+                  🌙
+                </div>
+                {gathering && !locked && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-widest text-amber-200">GATHERING ✨</div>}
               </motion.div>
             </div>
 
-            {/* mobile pour button */}
+            {/* mobile gather button */}
             <div className="absolute bottom-[24%] left-1/2 z-20 -translate-x-1/2 md:hidden">
               <button
-                onPointerDown={() => { pourHold.current = true; setCan({ x: 0.5, y: 0.42 }); setPouring(true) }}
-                onPointerUp={() => { pourHold.current = false; setPouring(false) }}
-                className="glass rounded-full px-6 py-3 text-sm">💧 Hold to water</button>
+                onPointerDown={() => { holdGather.current = true; setLantern({ x: 0.5, y: 0.45 }); if (!locked) setGathering(true) }}
+                onPointerUp={() => { holdGather.current = false; setGathering(false) }}
+                className="glass rounded-full px-6 py-3 text-sm">✨ Hold to gather</button>
             </div>
 
             {locked && (
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
                 <motion.p animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.6, repeat: Infinity }}
-                  className="font-script text-5xl text-rosepink text-glow-pink">growing…</motion.p>
+                  className="font-script text-5xl text-rosepink text-glow-pink">awakening…</motion.p>
               </div>
             )}
           </motion.div>
@@ -540,7 +468,7 @@ export default function App() {
         {scene === 'bloom' && (
           <motion.div key="bloom" className="absolute inset-0 z-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div className="absolute inset-x-0 bottom-[4%] top-[14%]">
-              <HeartTreeCanvas growth={1} bloom={bloom} windAmp={0.4} />
+              <HeartConstellationCanvas growth={1} bloom={bloom} />
             </div>
             <div className="absolute left-1/2 top-[10%] w-full max-w-2xl -translate-x-1/2 px-6 text-center">
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1.5 }}
@@ -562,7 +490,7 @@ export default function App() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.p className="font-serif-cine max-w-2xl text-2xl italic md:text-4xl"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
-              The heart leaves begin to detach —<br />
+              The star-hearts begin to drift —<br />
               <span className="text-rosepink">but love never disappears. It travels.</span>
             </motion.p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="mt-8">
@@ -776,7 +704,7 @@ export default function App() {
         {scene === 'finale' && (
           <motion.div key="finale" className="absolute inset-0 z-10 flex flex-col items-center justify-center overflow-y-auto px-6 text-center"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="absolute inset-x-0 bottom-[10%] top-[30%] opacity-60"><HeartTreeCanvas growth={1} bloom={0.7} windAmp={0.7} /></div>
+            <div className="absolute inset-x-0 bottom-[10%] top-[30%] opacity-60"><HeartConstellationCanvas growth={1} bloom={0.7} /></div>
             <div className="relative z-10 flex max-h-full flex-col items-center gap-4 overflow-y-auto py-10">
               <p className="font-serif-cine text-xl italic md:text-2xl">{C.finale.line1}</p>
               <p className="font-serif-cine text-xl italic text-rosepink md:text-2xl">{C.finale.line2}</p>
@@ -784,8 +712,8 @@ export default function App() {
               <p className="font-script text-3xl text-white/60">{C.finale.endless}</p>
               <div className="mt-4 flex flex-col items-center gap-3">
                 <GlassButton onClick={() => {
-                  moistureRef.current = 0; advancingRef.current = false
-                  setWaters(0); setGrowth(0.02); setMoisture(0); setBloom(0); setSoilDark(0)
+                  lightRef.current = 0; advancingRef.current = false
+                  setAwakenings(0); setGrowth(0.02); setStarlight(0); setBloom(0)
                   setFoundReasons([]); setEnvelopeOpen(false); setHeartRevealed(false); setHoldPower(0)
                   setSeedLanded(false); setStormPhase(0); setActiveMemory(null); go('opening'); setOpenStep(0)
                 }}>↺ {C.finale.replay}</GlassButton>

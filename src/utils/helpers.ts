@@ -80,6 +80,9 @@ class SoundEngine {
   pop() {
     this.tone(520, 0.25, 'triangle', 0.12, 0, 880)
   }
+  twinkle() {
+    this.tone(1400 + Math.random() * 900, 0.35, 'sine', 0.035)
+  }
   water() {
     if (!this.enabled || !this.ctx || !this.master) return
     // filtered noise burst = water
